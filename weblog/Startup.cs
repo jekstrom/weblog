@@ -38,12 +38,18 @@ namespace weblog
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
         {
             // Add framework services.
             services.AddMvc(options =>
 			{
-				options.SslPort = 44301;
+				if (env.IsDevelopment())
+				{
+					options.SslPort = 44301;
+				} else
+				{
+					options.SslPort = 443;
+				}
 				options.Filters.Add(new RequireHttpsAttribute());
 			});
 
