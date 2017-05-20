@@ -1,0 +1,13 @@
+﻿@model weblog.Models.PostModel
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>@Model.Name</h2>
+        @if (Model != null && !String.IsNullOrEmpty(Model.Content))
+        {
+            <p>
+                @Html.Raw(Model.Content)
+            </p>
+        }
+    </div>
+</div>

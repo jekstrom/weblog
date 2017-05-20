@@ -1,0 +1,10 @@
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\bin\Debug\netcoreapp1.1\weblog.deps.json
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\bin\Debug\netcoreapp1.1\weblog.runtimeconfig.json
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\bin\Debug\netcoreapp1.1\weblog.runtimeconfig.dev.json
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\bin\Debug\netcoreapp1.1\weblog.dll
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\bin\Debug\netcoreapp1.1\weblog.pdb
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\obj\Debug\netcoreapp1.1\weblog.csprojResolveAssemblyReference.cache
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\obj\Debug\netcoreapp1.1\weblog.AssemblyInfo.cs
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\obj\Debug\netcoreapp1.1\weblog.dll
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\obj\Debug\netcoreapp1.1\weblog.pdb
+C:\Users\rey99\Documents\Code\core_weblog\weblog\weblog\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs

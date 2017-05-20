@@ -1,0 +1,18 @@
+﻿@model IReadOnlyCollection<string>
+@using weblog.ViewComponents
+@using weblog.Services
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <ul class="list-group">
+            @foreach(string postName in Model) { 
+                <li class="list-group-item">
+                    <a asp-controller="Posts" asp-action="Post" asp-route-postName="@postName">@postName</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

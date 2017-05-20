@@ -1,0 +1,8 @@
+﻿@model weblog.Models.PostModel
+@using weblog.Services
+@using weblog.ViewComponents
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@await Component.InvokeAsync(nameof(Post), new { Name = Model.Name })
