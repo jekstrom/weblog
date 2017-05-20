@@ -16,6 +16,7 @@ namespace weblog
     public class Startup
     {
 		private readonly string _connectionString;
+		private readonly IHostingEnvironment _env;
 
 		public Startup(IHostingEnvironment env)
         {
@@ -33,17 +34,18 @@ namespace weblog
 			Configuration = builder.Build();
 
 			_connectionString = Configuration["StorageConnectionString"];
+			_env = env;
 		}
 
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
+        public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc(options =>
 			{
-				if (env.IsDevelopment())
+				if (_env.IsDevelopment())
 				{
 					options.SslPort = 44301;
 				} else
