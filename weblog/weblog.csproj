@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\LetsEncrypt\" />
   </ItemGroup>
 
 </Project>
