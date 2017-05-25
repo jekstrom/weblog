@@ -1,6 +1,7 @@
-﻿@model IReadOnlyCollection<string>
-@using weblog.ViewComponents
+﻿@using weblog.ViewComponents
 @using weblog.Services
+@using weblog.Models
+@model IReadOnlyCollection<PostModel>
 @{
     ViewData["Title"] = "Posts";
 }
@@ -8,9 +9,9 @@
 <div class="row">
     <div class="col-md-6">
         <ul class="list-group">
-            @foreach(string postName in Model) { 
+            @foreach(PostModel post in Model) {
                 <li class="list-group-item">
-                    <a asp-controller="Posts" asp-action="Post" asp-route-postName="@postName">@postName</a>
+                    <a asp-controller="Posts" asp-action="Post" asp-route-postName="@post.Name">@post.Name</a> (@post.LastModified)
                 </li>
             }
         </ul>

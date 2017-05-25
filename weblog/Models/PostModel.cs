@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace weblog.Models
 {
@@ -8,5 +9,6 @@ namespace weblog.Models
 		public string Name { get; set; }
 		[Required]
 		public string Content { get; set; }
+		public DateTime LastModified { get; set; }
     }
 }

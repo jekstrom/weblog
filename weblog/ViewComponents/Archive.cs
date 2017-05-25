@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using weblog.Models;
 using weblog.Services;
@@ -8,11 +9,11 @@ using weblog.Services;
 namespace weblog.ViewComponents
 {
 	[AllowAnonymous]
-    public class Post : ViewComponent
+    public class Archive : ViewComponent
     {
 		private readonly IPostService _postService;
 
-		public Post(IPostService postService)
+		public Archive(IPostService postService)
 		{
 			if (postService == null)
 			{
@@ -22,12 +23,11 @@ namespace weblog.ViewComponents
 			_postService = postService;
 		}
 
-		public async Task<IViewComponentResult> InvokeAsync(string name)
+		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			// Get content from database
-			PostModel post = await _postService.Get(name);
+			IReadOnlyCollection<PostModel> posts = await _postService.List();
 
-			return View(post);
+			return View(new ArchiveModel { Posts = posts });
 		}
     }
 }

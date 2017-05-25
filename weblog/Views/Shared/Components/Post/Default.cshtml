@@ -1,10 +1,11 @@
 ﻿@model weblog.Models.PostModel
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <h2>@Model.Name</h2>
         @if (Model != null && !String.IsNullOrEmpty(Model.Content))
         {
+            <small>@Model.LastModified.ToString("MMM dd, yyyy hh:mm tt")</small>
             <p>
                 @Html.Raw(Model.Content)
             </p>

@@ -27,7 +27,7 @@ namespace weblog.Controllers
         {
 			// Get primary post
 			
-            return View(new PostModel { Name = await _postService.GetLatestPostName() });
+            return View(await _postService.GetLatestPostName());
         }
 
 		public IActionResult About()

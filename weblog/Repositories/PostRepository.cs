@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using weblog.Models;
 
 namespace weblog.Repositories
 {
@@ -29,18 +30,32 @@ namespace weblog.Repositories
 			return true;
 		}
 
-		public async Task<IReadOnlyCollection<string>> List()
+		public async Task<IReadOnlyCollection<PostModel>> List()
 		{
 			BlobResultSegment segment = await _postContainer.ListBlobsSegmentedAsync(null);
 
-			return segment.Results.Select(blob => ((CloudBlockBlob)blob).Name).ToList();
+			return segment.Results.Select(
+				blob => 
+				new PostModel
+				{
+					Name = ((CloudBlockBlob)blob).Name,
+					LastModified = ((CloudBlockBlob)blob).Properties.LastModified?.DateTime.ToUniversalTime() ?? new DateTime()
+				}
+			).ToList();
 		}
 
-		public async Task<string> Get(string name)
+		public async Task<PostModel> Get(string name)
 		{
 			CloudBlockBlob blob = _postContainer.GetBlockBlobReference(name);
 
-			return await blob.DownloadTextAsync();
+			string content = await blob.DownloadTextAsync();
+
+			return new PostModel
+			{
+				Name = name,
+				Content = content,
+				LastModified = blob.Properties.LastModified?.DateTime ?? new DateTime()
+			};
 		}
 
 		public async Task<bool> Delete(string name)

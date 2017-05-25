@@ -25,7 +25,7 @@ namespace weblog.Controllers
 
 		public async Task<IActionResult> Index()
 		{
-			IReadOnlyCollection<string> posts = await _postService.List();
+			IReadOnlyCollection<PostModel> posts = await _postService.List();
 
 			return View(posts);
 		}

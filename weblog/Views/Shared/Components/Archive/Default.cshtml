@@ -1,0 +1,19 @@
+﻿@using weblog.Models
+@model weblog.Models.ArchiveModel
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Archive</h4>
+        @if (Model != null && Model.Posts != null && Model.Posts.Any())
+        {
+            <ul class="list-group">
+                @foreach (PostModel post in Model.Posts)
+                {
+                    <li class="list-group-item">
+                        <a asp-area="" asp-controller="Posts" asp-action="Post" asp-route-postName="@post.Name">@post.Name</a> (@post.LastModified.ToString("yyyy-dd-MM"))
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

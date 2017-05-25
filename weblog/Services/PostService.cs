@@ -26,19 +26,19 @@ namespace weblog.Services
 			return await _repository.Insert(post.Name, post.Content);
 		}
 
-		public async Task<IReadOnlyCollection<string>> List()
+		public async Task<IReadOnlyCollection<PostModel>> List()
 		{
 			return await _repository.List();
 		}
 
-		public async Task<string> Get(string name)
+		public async Task<PostModel> Get(string name)
 		{
 			return await _repository.Get(name);
 		}
 
-		public async Task<string> GetLatestPostName()
+		public async Task<PostModel> GetLatestPostName()
 		{
-			IReadOnlyCollection<string> posts = await List();
+			IReadOnlyCollection<PostModel> posts = await List();
 
 			// Just assume the last post in posts is the latest for now. Order is not guaranteed.
 			return posts.Last();

@@ -7,9 +7,9 @@ namespace weblog.Services
     public interface IPostService
     {
 		Task<bool> Insert(PostModel post);
-		Task<IReadOnlyCollection<string>> List();
-		Task<string> Get(string name);
-		Task<string> GetLatestPostName();
+		Task<IReadOnlyCollection<PostModel>> List();
+		Task<PostModel> Get(string name);
+		Task<PostModel> GetLatestPostName();
 		Task<bool> Delete(string name);
 	}
 }

@@ -8,6 +8,13 @@
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
     <UserSecretsId>5a5fdc06-fb7b-4a72-bb18-bf080d909370</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\LetsEncrypt\**" />
+    <Content Remove="Views\LetsEncrypt\**" />
+    <EmbeddedResource Remove="Views\LetsEncrypt\**" />
+    <None Remove="Views\LetsEncrypt\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -32,7 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
-    <Folder Include="Views\LetsEncrypt\" />
   </ItemGroup>
 
 </Project>
