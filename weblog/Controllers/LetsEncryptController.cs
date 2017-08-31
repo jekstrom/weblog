@@ -9,10 +9,10 @@ namespace weblog.Controllers
 	public class LetsEncryptController : Controller
 	{
 		[HttpGet]
-		[Route(".well-known/acme-challenge/UFC70B-R9iV1vDOMG2SJJ94Bn18KAitU-zgsnot853A")]
+		[Route(".well-known/acme-challenge/dIPPI-VdxTwJh91ZxfbfYn927ozJlqbp3Q6BLxM_iP4]")]
 		public IActionResult Verify()
 		{
-			string nonce = "UFC70B-R9iV1vDOMG2SJJ94Bn18KAitU-zgsnot853A.5zRqNqFhk-Ia6CwtsCtB9_TxvElwheqNigRuXxqyEO8";
+			string nonce = "dIPPI-VdxTwJh91ZxfbfYn927ozJlqbp3Q6BLxM_iP4.6kqZFPlL1G73MD7rpngpKy3uksSfZQUojbI-XsG2Tp8";
 			return new ObjectResult(nonce);
 		}
 	}
