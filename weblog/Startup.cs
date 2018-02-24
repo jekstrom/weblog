@@ -4,12 +4,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using weblog.Services;
 using weblog.Repositories;
 using weblog.Models;
 using weblog.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Amazon.S3;
+using Amazon;
+using Serilog;
+using System.IO;
+using Polly;
+using System;
 
 namespace weblog
 {
@@ -30,6 +38,12 @@ namespace weblog
 			{
 				builder.AddUserSecrets<Startup>();
 			}
+
+			Log.Logger = new LoggerConfiguration()
+			   .MinimumLevel.Debug()
+			   .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, "log-{Date}.txt"))
+			   .CreateLogger();
+
 
 			Configuration = builder.Build();
 
@@ -56,15 +70,44 @@ namespace weblog
 			});
 
 			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(Configuration["weblogsql2"]));
+				options.UseNpgsql(Configuration["postgres"]));
 
 			services.AddIdentity<ApplicationUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(o => o.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"))
+				.AddGoogle(o =>
+				{
+					o.ClientId = Configuration["Authentication:Google:ClientId"];
+					o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+				}
+			);
+
+			IAmazonS3 client = new AmazonS3Client(new Amazon.Runtime.BasicAWSCredentials(Configuration["aws_client_access_key"], Configuration["aws_secret_access_key"]), RegionEndpoint.USEast1);
+
+			AwsConfiguration config = new AwsConfiguration();
+			Configuration.GetSection("AWS").Bind(config);
+
+			IAsyncPolicy retryPolicy = Policy
+			  .Handle<Exception>()
+			  .WaitAndRetryAsync(5, retryAttempt =>
+				TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+				onRetry: (exception, retryTimespan) => Log.Logger.Error(exception, $"Retry count {retryTimespan}")
+			  );
+
+			IAsyncPolicy bulkheadPolicy = Policy.BulkheadAsync(
+				10, 
+				onBulkheadRejectedAsync: async (context) => Log.Logger.Error("Bulkhead Rejection")
+				
+			);
+
+			IAsyncPolicy policy = Policy.WrapAsync(retryPolicy, bulkheadPolicy);
+
 			services.AddTransient<IEmailSender, AuthMessageSender>();
 			services.AddTransient<ISmsSender, AuthMessageSender>();
-			services.AddTransient<IPostRepository, PostRepository>(s => new PostRepository(_connectionString));
+			services.AddTransient<IPostRepository, S3PostRepository>(s => new S3PostRepository(client, config.BucketName, config.KeyPrefix, Log.Logger, policy));
 			services.AddTransient<IPostService>(s => new PostService(s.GetService<IPostRepository>()));
         }
 
@@ -86,15 +129,7 @@ namespace weblog
 
             app.UseStaticFiles();
 
-			app.UseIdentity();
-
-			app.UseGoogleAuthentication(
-				new GoogleOptions
-				{
-					ClientId = Configuration["Authentication:Google:ClientId"],
-					ClientSecret = Configuration["Authentication:Google:ClientSecret"]
-				}
-			);
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
             {

@@ -40,8 +40,17 @@ namespace weblog.Services
 		{
 			IReadOnlyCollection<PostModel> posts = await List();
 
-			// Just assume the last post in posts is the latest for now. Order is not guaranteed.
-			return posts.Last();
+			if (posts.Any())
+			{ 
+				// Just assume the last post in posts is the latest for now. Order is not guaranteed.
+				return posts.Last();
+			}
+
+			return new PostModel
+			{
+				Name = String.Empty,
+				Content = String.Empty
+			};
 		}
 
 		public async Task<bool> Delete(string name)
